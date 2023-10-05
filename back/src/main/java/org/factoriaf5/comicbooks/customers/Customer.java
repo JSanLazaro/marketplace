@@ -1,14 +1,29 @@
 package org.factoriaf5.comicbooks.customers;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.factoriaf5.comicbooks.genres.Genre;
 import org.factoriaf5.comicbooks.orders.Order;
+import org.factoriaf5.comicbooks.roles.Role;
+import org.factoriaf5.comicbooks.roles.RoleEnum;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "customers")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class Customer implements Serializable {
 
     @Id
     @Column(name = "email", nullable = false)
@@ -68,6 +83,33 @@ public class Customer {
 
     @OneToMany(fetch = FetchType.LAZY)
     public Set<Order> orders = new HashSet<>();
+
+    
+    
+
+
+    @ManyToMany(mappedBy = "customer")
+    private Set<Role> role = new HashSet<>();
+
+
+    // @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    // @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "customer_id"))
+    // @Enumerated(EnumType.STRING)
+    // private Set<RoleEnum> roles;
+
+
+   /*  @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role; */
+    
+   /*  @ManyToOne */
+   /*  @JoinColumn(name="role_id", nullable=false) */
+   
+    /* public Role role;   */
+
+   /*  @OneToMany(fetch = FetchType.LAZY)
+    public Set<Role> role = new HashSet<>();  */
+
 
     // @ManyToMany
     // @JoinTable(name="customer_order",
@@ -234,6 +276,10 @@ public class Customer {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
+
+    //  public Role getRole() {
+    //     return role;
+    // } 
 
     
 

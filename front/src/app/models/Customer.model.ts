@@ -15,5 +15,5 @@ export interface Customer{
     town: string;
     province: string;
     password: string;
-    confirmPassword: string; 
+    confirmPassword: string;
 }

@@ -5,6 +5,7 @@ import { Customer } from 'src/app/models/Customer.model';
 import { Router } from '@angular/router';
 import { CustomerService } from 'src/app/services/customer.service';
 import Swal from 'sweetalert2';
+import { CustomerRole } from 'src/app/models/CustomerRole';
 
 @Component({
   selector: 'app-register-a',
@@ -14,6 +15,14 @@ import Swal from 'sweetalert2';
 export class RegisterAComponent {
   selectedDniType: string = 'DNI';
   registrationForm!: FormGroup;
+
+  customeremail!: any;
+  role:CustomerRole={
+    role_id: 1,
+    customer_id: "",
+  }
+
+
   newCustomer : Customer = {
     id: 0,
     email: '',
@@ -69,8 +78,14 @@ export class RegisterAComponent {
     }
   }
   registerCustomer(): void {
-    if (this.registrationForm.valid) {
+    this.role.customer_id = this.registrationForm.get('email')?.value; 
+
+
+  if (this.registrationForm.valid) { 
+        
+      
       const registrationData = this.registrationForm.value;
+      
       this.customerService.register(registrationData).subscribe(
         (response: any) => {
           Swal.fire({
@@ -90,12 +105,19 @@ export class RegisterAComponent {
           console.error('Error durante el registro', error);
         }
       );
-    } else {
+     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error de validación',
         text: 'Por favor, complete todos los campos correctamente'
       });
-    }
+    } 
+
+
+    this.customerService.registerCustomerRole(this.role).subscribe((data: CustomerRole) => {
+      console.log(data);
+    });
   }
+  
+
 }  
